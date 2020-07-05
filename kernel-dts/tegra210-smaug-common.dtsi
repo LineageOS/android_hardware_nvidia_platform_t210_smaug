@@ -31,6 +31,7 @@
 #include <dt-bindings/thermal/tegra124-soctherm.h>
 #include <dt-bindings/thermal/tegra210-trips.h>
 #include "smaug-platforms/tegra210-smaug-comms.dtsi"
+#include <audio/tegra210-audio-dai-links.dtsi>
 
 / {
 
@@ -465,6 +466,8 @@
 			gpio-controller;
 			#gpio-cells = <2>;
 			status = "okay";
+
+			#sound-dai-cells = <1>;
 		};
 
 		headset: nau8825.5-001a@1a {
@@ -495,8 +498,7 @@
 			clock-names = "mclk";
 			clocks = <&tegra_car TEGRA210_CLK_CLK_OUT_2>;
 
-			assigned-clocks = <&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-			assigned-clock-rates = <19200000>;
+			#sound-dai-cells = <1>;
 		};
 
 	};
@@ -504,72 +506,50 @@
 	speaker: max98357a {
 		compatible = "maxim,max98357a";
 		status = "okay";
+		sdmode-gpios = <&rt5677 4 GPIO_ACTIVE_HIGH>;
+		sdmode-delay = <5>;
+
+		#sound-dai-cells = <1>;
 	};
 
 	sound_card: sound {
 		status = "okay";
-		compatible = "nvidia,tegra-audio-t210ref-mobile-rt5677";
-		nvidia,model = "tegra-snd-t210ref-mobile-rt5677";
+		compatible = "nvidia,tegra210-ape";
+		nvidia-audio-card,name = "Google Pixel C APE";
 
-		nvidia,spkr-en-gpios = <&rt5677 4 GPIO_ACTIVE_HIGH>;
-		nvidia,dmic-clk-en-gpios = <&rt5677 2 GPIO_ACTIVE_HIGH>;
+		//nvidia,dmic-clk-en-gpios = <&rt5677 2 GPIO_ACTIVE_HIGH>;
 
 		clocks = <&tegra_car TEGRA210_CLK_PLL_A>,
-			<&tegra_car TEGRA210_CLK_PLL_A_OUT0>,
-			<&tegra_car TEGRA210_CLK_D_AUDIO>,
-			<&tegra_car TEGRA210_CLK_EXTERN1>,
-			<&tegra_car TEGRA210_CLK_CLK_OUT_1>,
-			<&tegra_car TEGRA210_CLK_EXTERN2>,
-			<&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-		clock-names = "pll_a", "pll_a_out0", "ahub",
-			"extern1", "clk_out_1", "extern2", "clk_out_2";
+			 <&tegra_car TEGRA210_CLK_PLL_A_OUT0>,
+			 <&tegra_car TEGRA210_CLK_EXTERN1>;
+		clock-names = "pll_a", "pll_a_out0", "extern1";
+		assigned-clocks = <&tegra_car TEGRA210_CLK_EXTERN1>;
+		assigned-clock-parents = <&tegra_car TEGRA210_CLK_PLL_A_OUT0>;
 
-		assigned-clocks = <&tegra_car TEGRA210_CLK_PLL_A>,
-			<&tegra_car TEGRA210_CLK_PLL_A_OUT0>,
-			<&tegra_car TEGRA210_CLK_D_AUDIO>,
-			<&tegra_car TEGRA210_CLK_EXTERN1>,
-			<&tegra_car TEGRA210_CLK_EXTERN2>,
-			<&tegra_car TEGRA210_CLK_CLK_OUT_1>,
-			<&tegra_car TEGRA210_CLK_CLK_OUT_2>;
-		assigned-clock-rates = <368640000>, <36864000>,
-			<36864000>, <24576000>, <24576000>, <24576000>, <19200000>;
+		nvidia-audio-card,routing =
+			"HP Jack", "z HPOL",
+			"HP Jack", "z HPOR",
+			"HP Jack", "x LOUT1",
+			"HP Jack", "x LOUT2",
+			"MIC Jack", "x MICBIAS1",
+			"x IN1N", "MIC Jack",
+			"z MIC", "MIC Jack",
+			"x IN1P", "MIC Jack",
+			"x DMIC L1", "MIC",
+			"x DMIC R1", "MIC",
+			"x DMIC L2", "MIC",
+			"x DMIC R2", "MIC",
+			"SPK", "x PDM1L",
+			"SPK", "x PDM1R",
+			"SPK", "y Speaker";
 
-		nvidia,num-codec-link = <1>;
-		mclk-fs = <256>;
+		nvidia-audio-card,widgets =
+			"Microphone", "MIC Jack",
+			"Microphone", "MIC",
+			"Headphone", "HP Jack",
+			"Speaker", "SPK";
 
-		nvidia,audio-routing =
-			"Headphone Jack", "HPOL",
-			"Headphone Jack", "HPOR",
-			"MICBIAS",  "Mic Jack",
-			"MIC", "Mic Jack",
-			"DMIC L1", "Int Mic",
-			"DMIC R1", "Int Mic",
-			"DMIC L2", "Int Mic",
-			"DMIC R2", "Int Mic",
-			"Int Spk", "Speaker";
-
-		nvidia,xbar = <&tegra_axbar>;
-
-		nvidia,dai-link-1 {
-			link-name = "rt5677-playback";
-			cpu-dai = <&tegra_i2s1>;
-			codec-dai = <&rt5677>;
-			cpu-dai-name = "I2S1";
-			codec-dai-name = "rt5677-aif1";
-		//	tx-mask = <0xFF>;
-		//	rx-mask = <0xFF>;
-			format = "i2s";
-			bitclock-slave;
-			frame-slave;
-			frame-noninversion;
-			bitclock-noninversion;
-		//	frame-inversion;
-			bit-format = "s16_le";
-			bclk_ratio = <0>;
-			srate = <48000>;
-			num-channel = <2>;
-		//	name-prefix = "x";
-		};
+		nvidia-audio-card,mclk-fs = <256>;
 	};
 
 	bcmdhd_wlan {
@@ -897,5 +877,29 @@
 		/delete-node/ spi-touch19x12@0;
 		/delete-node/ spi-touch25x16@0;
 		/delete-node/ spi-touch14x8@0;
+	};
+};
+
+&i2s1_to_codec {
+	link-name = "rt5677-playback";
+	codec {
+		sound-dai = <&rt5677 0>;
+		prefix = "x";
+	};
+};
+
+&i2s2_to_codec {
+	link-name = "max98357a-playback";
+	codec {
+		sound-dai = <&speaker 0>;
+		prefix = "y";
+	};
+};
+
+&i2s3_to_codec {
+	link-name = "nau8825-playback";
+	codec {
+		sound-dai = <&headset 0>;
+		prefix = "z";
 	};
 };
