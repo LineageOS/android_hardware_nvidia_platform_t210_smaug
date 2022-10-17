@@ -834,7 +834,7 @@
 
 	clock@70110000 {
 		status = "okay";
-		nvidia,align-step-uv = <6250>;
+		nvidia,pwm-voltage-step-microvolts = <6250>;
 		nvidia,sample-rate = <12500>;
 		nvidia,droop-ctrl = <0x00000f00>;
 		nvidia,force-mode = <1>;
