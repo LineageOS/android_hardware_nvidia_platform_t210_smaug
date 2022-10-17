@@ -36,7 +36,7 @@
 		};
 
 		pplcd_vdd: regulator@1 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <1>;
 			regulator-name = "pplcd-vdd";
 			regulator-min-microvolt = <4400000>;
@@ -47,7 +47,7 @@
 		};
 
 		pp3000_always: regulator@2 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <2>;
 			regulator-name = "pp3000-always";
 			regulator-min-microvolt = <3000000>;
@@ -56,7 +56,7 @@
 		};
 
 		pp3300: regulator@3 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <3>;
 			regulator-name = "pp3300";
 			regulator-min-microvolt = <3300000>;
@@ -67,7 +67,7 @@
 		};
 
 		pp5000: regulator@4 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <4>;
 			regulator-name = "pp5000";
 			regulator-min-microvolt = <5000000>;
@@ -77,7 +77,7 @@
 		};
 
 		pp1800_lcdio: regulator@5 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <5>;
 			regulator-name = "pp1800-lcdio";
 			regulator-min-microvolt = <1800000>;
@@ -88,7 +88,7 @@
 		};
 
 		pp1800_cam: regulator@6 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg= <6>;
 			regulator-name = "pp1800-cam";
 			regulator-min-microvolt = <1800000>;
@@ -98,7 +98,7 @@
 		};
 
 		usbc_vbus: regulator@7 {
-			compatible = "regulator-fixed-sync";
+			compatible = "regulator-fixed-sync", "regulator-fixed";
 			reg = <7>;
 			regulator-name = "usbc-vbus";
 			regulator-min-microvolt = <5000000>;
