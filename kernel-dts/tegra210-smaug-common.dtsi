@@ -77,8 +77,11 @@
 					nvidia,controller-type-i2c;
 					nvidia,controller-id = <4>;
 					nvidia,enable-controller-reset;
-					nvidia,write-commands = <0x16 0x20
-								0x1B 0x20>;
+					nvidia,write-commands = <
+							0x16 0x20 /* Set 1.0V and disable SD0 */
+							0x42 0x99 /* Wake reasons: SFT_RST/ACOK/LID/EN0 */
+							0x41 0x80 /* Reboot */
+						>;
 				};
 				commands@4-0068 {
 					nvidia,command-names = "rtc";
@@ -88,8 +91,10 @@
 					nvidia,controller-type-i2c;
 					nvidia,controller-id = <4>;
 					nvidia,enable-controller-reset;
-					nvidia,write-commands = <0x15 0x01
-								0x04 0x0b>;
+					nvidia,write-commands = <
+							0x15 0x01
+							0x04 0x01 /* Update RTC regs */
+						>;
 				};
 			};
 		};
