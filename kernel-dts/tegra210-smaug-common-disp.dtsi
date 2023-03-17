@@ -14,7 +14,7 @@
  *
  */
 
-#include "smaug-platforms/panel-s-wqxga-10-2.dtsi"
+#include "smaug-platforms/panel-j-wqxga-10-2.dtsi"
 //#include <t210-common-platforms/tegra210-ers-hdmi-e2190-1100-a00.dtsi>
 
 / {
@@ -52,8 +52,8 @@
 		dsi {
 			nvidia,dsi-controller-vs = <DSI_VS_1>;
 			status = "okay";
-			nvidia,active-panel = <&panel_s_wqxga_10_2>;
-			panel-s-wqxga-10-2 {
+			nvidia,active-panel = <&panel_j_wqxga_10_2>;
+			panel-j-wqxga-10-2 {
 				status = "okay";
 				nvidia,dsi-dpd-pads = <DSIC_DPD_EN DSID_DPD_EN>;
 				nvidia,panel-en-gpio = <&gpio TEGRA_GPIO(V, 1) 0>; /* PV1 */
