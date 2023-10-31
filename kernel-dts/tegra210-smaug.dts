@@ -44,18 +44,6 @@
 	firmware {
 		android {
 			compatible = "android,firmware";
-			system_root_blkdev = "/dev/mmcblk0p4";
-			fstab {
-				compatible = "android,fstab";
-				vendor {
-					compatible = "android,vendor";
-					dev = "/dev/block/platform/sdhci-tegra.3/by-name/VNR";
-					type = "ext4";
-					mnt_flags = "ro,barrier=1,discard";
-					fsmgr_flags = "wait";
-					status = "ok";
-				};
-			};
 		};
 	};
 
